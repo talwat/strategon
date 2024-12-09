@@ -1,4 +1,4 @@
 name: strategon
-version: '1.0-SNAPSHOT'
+version: '${version}'
 main: talwat.me.strategon.Strategon
-api-version: '1.21'
+api-version: '1.21.3'

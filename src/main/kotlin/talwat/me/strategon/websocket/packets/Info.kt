@@ -1,15 +1,16 @@
-package talwat.me.strategon.websocket.data
+package talwat.me.strategon.websocket.packets
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.bukkit.Bukkit
-import talwat.me.strategon.game.StrategistColor
 import talwat.me.strategon.Strategon
+import talwat.me.strategon.Team
+import talwat.me.strategon.websocket.packets.info.Player
 import kotlin.math.roundToLong
 
 @Serializable
 class Info(
-    val strategist: StrategistColor,
+    val team: Team,
 
     // Kotlin is, unfortunately, just as stupid as Java.
     // Now, we have to give it a "default" which will never be used,

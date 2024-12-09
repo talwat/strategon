@@ -1,16 +1,10 @@
 package talwat.me.strategon.game
 
 import kotlinx.serialization.Serializable
+import talwat.me.strategon.Strategist
 import java.util.UUID
 
-@Serializable
-enum class StrategistColor {
-    Red,
-    Blue
-}
-
-class Strategist(val uuid: UUID, val color: StrategistColor)
-
-class Game(val strategists: Pair<UUID, UUID>) {
-
-}
+class Game(
+    val strategists: Pair<Strategist, Strategist>,
+    val divisions: Pair<List<Division>, List<Division>>
+)

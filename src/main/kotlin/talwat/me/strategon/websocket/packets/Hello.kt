@@ -1,4 +1,7 @@
 package talwat.me.strategon.websocket.packets
 
-class Hello {
-}
+import kotlinx.serialization.Serializable
+import talwat.me.strategon.Team
+
+@Serializable
+class Hello(val team: Team)

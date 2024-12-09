@@ -1,14 +1,10 @@
-package talwat.me.strategon.websocket.data
+package talwat.me.strategon.websocket.packets
 
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import talwat.me.strategon.Strategon
 import java.util.*
 
 object UUIDSerializer : KSerializer<UUID> {
