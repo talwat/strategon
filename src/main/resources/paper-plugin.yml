@@ -1,0 +1,4 @@
+name: strategon
+version: '1.0-SNAPSHOT'
+main: talwat.me.strategon.Strategon
+api-version: '1.21'
