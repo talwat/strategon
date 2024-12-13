@@ -16,6 +16,9 @@ enum class PacketType {
 
     @SerialName("setupRequested")
     SetupRequested,
+
+    @SerialName("setup")
+    Setup,
 }
 
 @Serializable
