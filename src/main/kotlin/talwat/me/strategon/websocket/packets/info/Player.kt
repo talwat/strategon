@@ -1,7 +1,7 @@
 package talwat.me.strategon.websocket.packets.info
 
 import kotlinx.serialization.Serializable
-import talwat.me.strategon.websocket.packets.UUIDSerializer
+import talwat.me.strategon.websocket.serializers.UUIDSerializer
 import java.util.*
 
 @Serializable

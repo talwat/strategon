@@ -6,12 +6,13 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.java.JavaPlugin
-import talwat.me.strategon.websocket.Server
+import talwat.me.strategon.websocket.startApplication
 
 class Strategon : JavaPlugin(), Listener {
     override fun onEnable() {
         Bukkit.getPluginManager().registerEvents(this, this)
-        val server = Server()
+        startApplication()
+
         this.logger.info("Initialized!")
     }
 
