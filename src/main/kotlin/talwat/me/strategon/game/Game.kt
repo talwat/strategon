@@ -1,10 +1,9 @@
 package talwat.me.strategon.game
 
-import kotlinx.serialization.Serializable
 import talwat.me.strategon.Strategist
-import java.util.UUID
+import talwat.me.strategon.websocket.Setup
 
 class Game(
-    val strategists: Pair<Strategist, Strategist>,
-    val divisions: Pair<List<Division>, List<Division>>
+    val strategists: Array<Strategist>,
+    setup: Array<Setup>
 )

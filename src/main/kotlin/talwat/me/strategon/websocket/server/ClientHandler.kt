@@ -3,63 +3,38 @@ package talwat.me.strategon.websocket.server
 import io.ktor.server.application.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.consumeEach
-import org.bukkit.Bukkit
-import talwat.me.strategon.Strategist
-import talwat.me.strategon.Team
-import talwat.me.strategon.websocket.*
+import talwat.me.strategon.websocket.Client
+import talwat.me.strategon.websocket.Hello
+import talwat.me.strategon.websocket.Packet
+import talwat.me.strategon.websocket.PacketType
 
-suspend fun Application.handler(
+/**
+ * Responsible for getting the initial client & strategist from both players.
+ */
+suspend fun Application.handle(
     session: WebSocketServerSession,
-    strategists: Array<Pair<Strategist, Client>?>
-) {
+    clients: Array<Client?>
+): Int? {
     val username = session.call.request.queryParameters["username"]
     if (username == null) {
         session.close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Username not included in URL params"))
-        return
+        return null
     }
 
-    val (team, index) = if (strategists.first() == null) {
-        Team.Red to 0
-    } else if (strategists.last() == null) {
-        Team.Blue to 1
+    val index = if (clients.first() == null) {
+        0
+    } else if (clients.last() == null) {
+        1
     } else {
-        // Add kicking of Strategists
         session.close(CloseReason(CloseReason.Codes.INTERNAL_ERROR, "Two strategists have already been selected"))
-        return
+        return null
     }
 
-    val strategist = Strategist(username, team)
-    val client = Client(session, Channel(Channel.BUFFERED))
-    strategists[index] = strategist to client
-
-    Bukkit.getLogger().info("strategist: $strategist, client: $client")
+    val client = Client(session, username)
+    clients[index] = client
 
     // Say hello, and notify the strategist of their details.
-    session.sendSerialized(Packet(PacketType.Hello, Hello(strategist)))
+    session.sendSerialized(Packet(PacketType.Hello, Hello(username)))
 
-    if (strategists.all { x -> x != null }) {
-        strategists.forEach { x -> x!!.second.channel.send(Signal.Setup) }
-    }
-
-    while (true) {
-        val signal = client.channel.receive()
-        Bukkit.getLogger().info("got signal: $signal")
-
-        if (signal == Signal.Setup) {
-            break
-        }
-    }
-
-    session.sendSerialized(Packet(PacketType.SetupRequested, null))
-
-    val setup: Packet<Setup> = session.receiveDeserialized();
-    Bukkit.getLogger().info("$setup")
-
-    session.incoming.consumeEach { frame ->
-        if (frame is Frame.Text) {
-            val receivedText = frame.readText()
-        }
-    }
+    return index
 }

@@ -6,25 +6,15 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.serializersModuleOf
-import talwat.me.strategon.Strategist
-import talwat.me.strategon.websocket.serializers.UUIDSerializer
-import talwat.me.strategon.websocket.server.handler
-import java.util.*
+import talwat.me.strategon.Global
+import talwat.me.strategon.Signal
+import talwat.me.strategon.websocket.server.handle
 import kotlin.time.Duration.Companion.seconds
-
-enum class Signal {
-    Lobby,
-    Setup,
-    GameRunning
-}
 
 data class Client(
     val socket: WebSocketServerSession,
-    val channel: Channel<Signal>
+    val username: String,
 )
 
 fun startApplication(): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
@@ -37,11 +27,17 @@ fun startApplication(): EmbeddedServer<NettyApplicationEngine, NettyApplicationE
 }
 
 fun Application.configureSockets() {
-    val strategists: Array<Pair<Strategist, Client>?> = Array(2) { null };
+    val clients: Array<Client?> = Array(2) { null }
 
     routing {
         webSocket("/play") {
-            handler(this, strategists)
+            val index = handle(this, clients) ?: return@webSocket
+
+            // Send the signal if all clients have joined.
+            if (clients.all { x -> x != null }) {
+                Global.clients = clients.requireNoNulls()
+                Global.channel.send(Signal.SetupStart)
+            }
         }
     }
 }

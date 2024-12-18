@@ -18,14 +18,14 @@ enum class DivisionType(title: String) {
 data class SetupDivision(
     @Serializable(with = UUIDSerializer::class)
     val leader: UUID,
-    val players: List<@Serializable(with = UUIDSerializer::class) UUID>,
+    val players: Set<@Serializable(with = UUIDSerializer::class) UUID>,
     val type: DivisionType,
     val title: String? = null
 )
 
 data class Division(
     val leader: Player,
-    val players: List<Player>,
+    val players: Set<Player>,
     val type: DivisionType,
     val title: String? = null
 )
