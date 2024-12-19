@@ -40,11 +40,13 @@ class Strategon : JavaPlugin(), Listener {
                 when (signal) {
                     Signal.Lobby -> TODO()
                     Signal.SetupStart -> {
-                        setup()
+                        Global.game = setup()
                     }
                 }
             }
         }
+
+        this.logger.info("Ending?")
     }
 
     @EventHandler

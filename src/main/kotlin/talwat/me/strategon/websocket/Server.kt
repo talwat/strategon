@@ -7,6 +7,8 @@ import io.ktor.server.netty.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
 import talwat.me.strategon.Global
 import talwat.me.strategon.Signal
 import talwat.me.strategon.websocket.server.handle
@@ -38,6 +40,8 @@ fun Application.configureSockets() {
                 Global.clients = clients.requireNoNulls()
                 Global.channel.send(Signal.SetupStart)
             }
+
+            // TODO: Fix immediate disconnect after this.
         }
     }
 }
@@ -46,6 +50,14 @@ fun Application.module() {
     install(WebSockets) {
         contentConverter = KotlinxWebsocketSerializationConverter(Json {
             encodeDefaults = true
+            classDiscriminator = "type"
+            serializersModule = SerializersModule {
+                polymorphic(Packet::class) {
+                    subclass(Packet.Hello::class, Packet.Hello.serializer())
+                    subclass(Packet.SetupRequested::class, Packet.SetupRequested.serializer())
+                    subclass(Packet.Setup::class, Packet.Setup.serializer())
+                }
+            }
         })
 
         pingPeriod = 15.seconds

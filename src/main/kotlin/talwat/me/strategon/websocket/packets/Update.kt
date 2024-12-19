@@ -9,7 +9,7 @@ import talwat.me.strategon.websocket.packets.info.Player
 import kotlin.math.roundToLong
 
 @Serializable
-class Info(
+class Update(
     val team: Team,
 
     // Kotlin is, unfortunately, just as stupid as Java.

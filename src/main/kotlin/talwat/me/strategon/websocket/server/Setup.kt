@@ -1,6 +1,5 @@
 package talwat.me.strategon.websocket.server
 
-import io.ktor.server.websocket.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -9,8 +8,8 @@ import talwat.me.strategon.Strategist
 import talwat.me.strategon.Team
 import talwat.me.strategon.game.Game
 import talwat.me.strategon.websocket.Packet
-import talwat.me.strategon.websocket.PacketType
-import talwat.me.strategon.websocket.Setup
+import talwat.me.strategon.websocket.recievePacket
+import talwat.me.strategon.websocket.sendPacket
 
 suspend fun setup(): Game {
     val strategists = Global.clients!!.mapIndexed { index, client ->
@@ -20,17 +19,18 @@ suspend fun setup(): Game {
             Team.Blue
         }
 
-        Strategist(client.username, team)
+        Strategist(client.username, index, team)
     }.toTypedArray()
 
-    val setups: Array<Setup>
+    val setups: Array<Packet.Setup>
     coroutineScope {
         val asks = Global.clients!!.map { client ->
             async {
-                client.socket.sendSerialized(Packet(PacketType.SetupRequested, null))
-                val setup: Packet<Setup> = client.socket.receiveDeserialized()
+                client.sendPacket(Packet.SetupRequested)
 
-                setup.data
+                // TODO: Fix this with a proper check
+                val setup: Packet.Setup = client.recievePacket() as Packet.Setup
+                setup
             }
         }
 

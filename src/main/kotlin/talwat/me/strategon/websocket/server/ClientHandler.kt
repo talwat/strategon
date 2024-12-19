@@ -4,9 +4,8 @@ import io.ktor.server.application.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import talwat.me.strategon.websocket.Client
-import talwat.me.strategon.websocket.Hello
 import talwat.me.strategon.websocket.Packet
-import talwat.me.strategon.websocket.PacketType
+import talwat.me.strategon.websocket.sendPacket
 
 /**
  * Responsible for getting the initial client & strategist from both players.
@@ -34,7 +33,7 @@ suspend fun Application.handle(
     clients[index] = client
 
     // Say hello, and notify the strategist of their details.
-    session.sendSerialized(Packet(PacketType.Hello, Hello(username)))
+    client.sendPacket(Packet.Hello(username))
 
     return index
 }

@@ -15,5 +15,6 @@ enum class Team {
 @Serializable
 data class Strategist(
     val username: String,
+    val index: Int,
     val team: Team
 )
