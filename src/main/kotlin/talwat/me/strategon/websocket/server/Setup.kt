@@ -3,6 +3,7 @@ package talwat.me.strategon.websocket.server
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import org.bukkit.Bukkit
 import talwat.me.strategon.Global
 import talwat.me.strategon.Strategist
 import talwat.me.strategon.Team
@@ -27,8 +28,6 @@ suspend fun setup(): Game {
         val asks = Global.clients!!.map { client ->
             async {
                 client.sendPacket(Packet.SetupRequested)
-
-                // TODO: Fix this with a proper check
                 val setup: Packet.Setup = client.recievePacket() as Packet.Setup
                 setup
             }

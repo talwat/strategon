@@ -6,6 +6,9 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -41,7 +44,10 @@ fun Application.configureSockets() {
                 Global.channel.send(Signal.SetupStart)
             }
 
-            // TODO: Fix immediate disconnect after this.
+
+            while (true) {
+                delay(3000)
+            }
         }
     }
 }

@@ -31,7 +31,7 @@ object Global {
 class Strategon : JavaPlugin(), Listener {
     override fun onEnable() {
         Bukkit.getPluginManager().registerEvents(this, this)
-        startApplication()
+        val app = startApplication()
 
         this.logger.info("Initialized!")
 
@@ -41,6 +41,7 @@ class Strategon : JavaPlugin(), Listener {
                     Signal.Lobby -> TODO()
                     Signal.SetupStart -> {
                         Global.game = setup()
+                        Bukkit.getLogger().info("Setup done!")git a
                     }
                 }
             }
