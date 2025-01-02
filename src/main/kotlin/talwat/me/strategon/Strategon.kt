@@ -41,7 +41,7 @@ class Strategon : JavaPlugin(), Listener {
                     Signal.Lobby -> TODO()
                     Signal.SetupStart -> {
                         Global.game = setup()
-                        Bukkit.getLogger().info("Setup done!")git a
+                        Bukkit.getLogger().info("Setup done!")
                     }
                 }
             }
